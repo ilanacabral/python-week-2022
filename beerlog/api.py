@@ -1,4 +1,3 @@
-from ast import Delete
 from typing import List
 from fastapi import (
     FastAPI,
@@ -16,7 +15,7 @@ from beerlog.database import get_session
 from beerlog.serializers import BeerOut, BeerIn
 from beerlog.models import Beer
 from sqlalchemy.exc import NoResultFound
-from fastapi.encoders import jsonable_encoder
+
 
 api = FastAPI(title="Beerlog")
 
@@ -53,11 +52,13 @@ def update_partial_beer(beer_id: int, update_beer: Beer):
         raise HTTPException(status_code=404, detail="Beer not found")
 
 
-@api.post("/beers/", response_model=BeerOut)
-def add_beer(beer_in: BeerIn):
+@api.post("/beers", response_model=BeerOut)
+async def add_beer(beer_in: BeerIn, response: Response):
     beer = Beer(**beer_in.dict())
     with get_session() as session:
         session.add(beer)
         session.commit()
         session.refresh(beer)
+
+    response.status_code = status.HTTP_201_CREATED
     return beer

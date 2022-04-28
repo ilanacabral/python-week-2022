@@ -4,7 +4,7 @@ from sqlmodel import create_engine, Session
 from beerlog.config import settings
 from beerlog import models
 
-warnings.filterwarnings("ignore",category=SAWarning)
+warnings.filterwarnings("ignore", category=SAWarning)
 
 engine = create_engine(settings.database.url)
 
