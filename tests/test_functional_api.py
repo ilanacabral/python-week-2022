@@ -24,7 +24,7 @@ def test_create_beer_via_api():
 
 
 def test_list_beers():
-    response = client.get("/beers")
+    response = client.get("/beers/")
     assert response.status_code == 200
     result = response.json()
     assert len(result) == 0
